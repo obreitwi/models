@@ -33,6 +33,7 @@ from __future__ import division
 from __future__ import print_function
 
 import os
+import os.path as osp
 from six.moves import urllib
 import tensorflow as tf
 
@@ -87,13 +88,20 @@ def create_readable_names_for_imagenet_labels():
   synset_url = '{}/imagenet_lsvrc_2015_synsets.txt'.format(base_url)
   synset_to_human_url = '{}/imagenet_metadata.txt'.format(base_url)
 
-  filename, _ = urllib.request.urlretrieve(synset_url)
-  synset_list = [s.strip() for s in open(filename).readlines()]
+  base_filename = osp.abspath(osp.join(osp.dirname(osp.abspath(__file__)),
+      "..", "..", "inception", "inception", "data"))
+  synset_filename = osp.join(base_filename, 'imagenet_lsvrc_2015_synsets.txt')
+  synset_to_human_filename = osp.join(base_filename, 'imagenet_metadata.txt')
+
+  #  filename, _ = urllib.request.urlretrieve(synset_url)
+  #  synset_list = [s.strip() for s in open(filename).readlines()]
+  synset_list = [s.strip() for s in open(synset_filename).readlines()]
   num_synsets_in_ilsvrc = len(synset_list)
   assert num_synsets_in_ilsvrc == 1000
 
-  filename, _ = urllib.request.urlretrieve(synset_to_human_url)
-  synset_to_human_list = open(filename).readlines()
+  #  filename, _ = urllib.request.urlretrieve(synset_to_human_url)
+  #  synset_to_human_list = open(filename).readlines()
+  synset_to_human_list = open(synset_to_human_filename).readlines()
   num_synsets_in_all_imagenet = len(synset_to_human_list)
   assert num_synsets_in_all_imagenet == 21842
 
